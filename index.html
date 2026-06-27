@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>First Conditional Adventure</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#2c3e50;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+#game{
+    width:700px;
+    background:#34495e;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 0 20px black;
+}
+
+h1{
+    text-align:center;
+}
+
+#question{
+    font-size:28px;
+    margin:30px 0;
+}
+
+button{
+    width:100%;
+    margin:10px 0;
+    padding:18px;
+    font-size:20px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    transform:scale(1.03);
+}
+
+.correct{
+    background:#2ecc71;
+}
+
+.wrong{
+    background:#e74c3c;
+}
+
+.normal{
+    background:#3498db;
+    color:white;
+}
+
+#score{
+    text-align:right;
+    font-size:20px;
+}
+
+#message{
+    margin-top:20px;
+    font-size:20px;
+    min-height:40px;
+}
+
+#next{
+    background:#f39c12;
+    display:none;
+}
+
+</style>
+</head>
+<body>
+
+<div id="game">
+
+<h1>🎮 First Conditional Adventure</h1>
+
+<div id="score">Score: 0</div>
+
+<div id="question"></div>
+
+<div id="answers"></div>
+
+<div id="message"></div>
+
+<button id="next">Next Question</button>
+
+</div>
+
+<script>
+
+const questions=[
+
+{
+q:"If it rains tomorrow...",
+a:[
+"I stay home.",
+"I will stay home.",
+"I stayed home.",
+"I am staying home."
+],
+correct:1,
+explanation:"First Conditional: If + Present Simple, will + Verb."
+},
+
+{
+q:"If she studies hard...",
+a:[
+"she will pass the exam.",
+"she passes the exam.",
+"she passed the exam.",
+"she pass the exam."
+],
+correct:0,
+explanation:"Correct: she will pass."
+},
+
+{
+q:"If we leave now...",
+a:[
+"we will catch the bus.",
+"we caught the bus.",
+"we catch the bus yesterday.",
+"we are catch the bus."
+],
+correct:0,
+explanation:"Future result → will catch."
+},
+
+{
+q:"If you don't hurry...",
+a:[
+"you will miss the train.",
+"you miss the train yesterday.",
+"you missed the train.",
+"you missing the train."
+],
+correct:0,
+explanation:"Correct First Conditional."
+},
+
+{
+q:"If they finish early...",
+a:[
+"they will come.",
+"they came.",
+"they comes.",
+"they coming."
+],
+correct:0,
+explanation:"Correct answer: will come."
+},
+
+{
+q:"If I see Tom...",
+a:[
+"I will tell him.",
+"I told him.",
+"I telling him.",
+"I tell him yesterday."
+],
+correct:0,
+explanation:"Future consequence → will tell."
+},
+
+{
+q:"If it is sunny...",
+a:[
+"we will go to the beach.",
+"we went.",
+"we goes.",
+"we going."
+],
+correct:0,
+explanation:"Use will + verb."
+},
+
+{
+q:"If Anna calls...",
+a:[
+"I answer.",
+"I answered.",
+"I will answer.",
+"I answering."
+],
+correct:2,
+explanation:"Correct: I will answer."
+},
+
+{
+q:"If you eat too much...",
+a:[
+"you will feel sick.",
+"you felt sick yesterday.",
+"you feeling sick.",
+"you feel sick yesterday."
+],
+correct:0,
+explanation:"Future consequence."
+},
+
+{
+q:"If we win...",
+a:[
+"we will celebrate!",
+"we celebrated yesterday.",
+"we celebrating.",
+"we celebrate yesterday."
+],
+correct:0,
+explanation:"Congratulations!"
+}
+
+];
+
+let current=0;
+let score=0;
+
+const question=document.getElementById("question");
+const answers=document.getElementById("answers");
+const message=document.getElementById("message");
+const next=document.getElementById("next");
+const scoreText=document.getElementById("score");
+
+function loadQuestion(){
+
+message.innerHTML="";
+next.style.display="none";
+answers.innerHTML="";
+
+let q=questions[current];
+
+question.innerHTML=(current+1)+"/"+questions.length+"<br><br>"+q.q;
+
+q.a.forEach((ans,index)=>{
+
+let btn=document.createElement("button");
+
+btn.className="normal";
+
+btn.innerHTML=ans;
+
+btn.onclick=function(){
+
+document.querySelectorAll("#answers button").forEach(b=>b.disabled=true);
+
+if(index===q.correct){
+
+btn.className="correct";
+
+score+=10;
+
+scoreText.innerHTML="Score: "+score;
+
+message.innerHTML="✅ Correct!<br>"+q.explanation;
+
+}else{
+
+btn.className="wrong";
+
+document.querySelectorAll("#answers button")[q.correct].className="correct";
+
+message.innerHTML="❌ Wrong!<br>"+q.explanation;
+
+}
+
+next.style.display="block";
+
+}
+
+answers.appendChild(btn);
+
+});
+
+}
+
+next.onclick=function(){
+
+current++;
+
+if(current>=questions.length){
+
+document.getElementById("game").innerHTML=`
+<h1>🏆 Game Over!</h1>
+
+<h2>Your score: ${score}/100</h2>
+
+<p>${
+score==100?"Perfect!":
+score>=80?"Excellent!":
+score>=60?"Good job!":
+"Keep practicing!"
+}</p>
+
+<button onclick="location.reload()">Play Again</button>
+`;
+
+return;
+}
+
+loadQuestion();
+
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
